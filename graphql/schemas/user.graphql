@@ -7,7 +7,10 @@ type User {
 }
 
 type Query {
-  users: [User]
+  getUserById(id: ID!): [User]
+}
+extend type Query {
+  getAllUsers: [User]
 }
 
 type Mutation {

@@ -12,4 +12,9 @@ module.exports = {
       return await newPost.save();
     },
   },
+  Query: {
+    getUserPosts: async (_, { userId }) => {
+      return await Post.find({ userId });
+    },
+  },
 };

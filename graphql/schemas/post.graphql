@@ -6,7 +6,7 @@ type Post {
 }
 
 type Query {
-  posts: [Post]
+  getUserPosts(userId: ID!): [Post]
 }
 
 type Mutation {

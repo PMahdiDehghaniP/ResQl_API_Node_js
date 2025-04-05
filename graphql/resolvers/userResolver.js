@@ -3,7 +3,10 @@ const Post = require("../../models/postModel");
 
 module.exports = {
   Query: {
-    users: async () => await User.find(),
+    getAllUsers: async () => await User.find(),
+    getUserById: async (_, { id }) => {
+      return await User.find({ _id: id });
+    },
   },
   Mutation: {
     createUser: async (_, { name, email, password }) => {
