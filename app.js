@@ -2,12 +2,14 @@ const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
+const JWT = require("jsonwebtoken");
 
 const { connectToDataBase } = require("./config/dataBaseConnector");
 const { typeDefs, resolvers } = require("./graphql");
 const errorHanlder = require("./middlewares/ErrorHandler");
 const setHeaders = require("./middlewares/HeaderSetter");
 const restApiRoutesProvider = require("./RESTAPI/routes");
+const { authenticateGraphQL } = require("./middlewares/Auth");
 
 //Config Env File
 dotenv.config({ path: "./config/config.env" });
@@ -26,6 +28,13 @@ app.use(errorHanlder);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: ({ req }) => authenticateGraphQL(req),
+  formatError: (err) => {
+    return {
+      message: err.message,
+      code: err.extensions?.code || "INTERNAL_SERVER_ERROR",
+    };
+  },
 });
 
 const PORT = process.env.APP_PORT || 5000;
